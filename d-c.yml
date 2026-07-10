@@ -19,7 +19,7 @@ services:
     container_name: frontend
     image: kdprasad028/frontend_july:v1
     ports:
-      - 8080:80
+      - 80:80
     depends_on:
       - backend
     
