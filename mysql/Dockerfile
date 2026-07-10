@@ -1,3 +1,15 @@
+# #1. its working
+# FROM mysql:8
+# ENV MYSQL_ROOT_PASSWORD="ExpenseApp@1"
+# ADD code/*.sql //docker-entrypoint-initdb.d
+
+
+#best practices
 FROM mysql:8
 ENV MYSQL_ROOT_PASSWORD="ExpenseApp@1"
-ADD code/*.sql //docker-entrypoint-initdb.d
+RUN groupadd expense && \
+    useradd -g expense expense && \
+    chown -R expense:expense /var/lib/mysql /var/run/mysqld /docker-entrypoint-initdb.d
+
+ADD code/*.sql /docker-entrypoint-initdb.d
+USER expense

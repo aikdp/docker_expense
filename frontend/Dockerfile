@@ -24,7 +24,7 @@
 # COPY expense.conf /etc/nginx/default.d/expense.conf
 
 
-#Best practices
+#Best practices - its working fine
 FROM nginx:mainline-alpine3.20-slim
 # RUN rm -rf /etc/nginx/nginx.conf
 RUN rm -rf /etc/nginx/conf.d/default.conf && \
