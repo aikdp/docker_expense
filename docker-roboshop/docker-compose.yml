@@ -1,0 +1,27 @@
+name: roboshop
+networks:
+  default:
+    name: roboshop  #default means, all serveices in this compose file wil use this network
+    driver: bridge
+    external: false #flase, docker will create this network, true - docker doesn't create
+services:
+  mongodb:
+    build: ./1-mongodb
+    image: kdprasad028/mongodb_aug:v1
+    container_name: mongodb
+  
+  catalogue:
+    build: ./2-catalogue
+    image: kdprasad028/catalogue_aug:v1
+    container_name: catalogue
+    depends_on:
+      - mongodb
+
+  frontend:
+    build: ./3-frontend
+    image: kdprasad028/frontend_aug:v1
+    container_name: frontend
+    depends_on:
+      - catalogue
+    ports:
+      - "80:80"
