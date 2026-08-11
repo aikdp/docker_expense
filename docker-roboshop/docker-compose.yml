@@ -45,7 +45,7 @@ services:
       MONGO: "true"
   
   cart:
-    build: ./6-user
+    build: ./6-cart
     image: kdprasad028/cart_aug:v1
     container_name: cart
     depends_on:
