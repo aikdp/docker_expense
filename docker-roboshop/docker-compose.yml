@@ -44,3 +44,14 @@ services:
       MONGO_URL: "mongodb://mongodb:27017/users"
       MONGO: "true"
   
+  cart:
+    build: ./6-user
+    image: kdprasad028/cart_aug:v1
+    container_name: cart
+    depends_on:
+      - redis
+      - catalogue
+    environment:
+      REDIS_HOST: redis
+      CATALOGUE_HOST: catalogue
+      CATALOGUE_PORT: 8080
