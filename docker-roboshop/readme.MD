@@ -23,3 +23,7 @@ docker logs catalogue
 ```
 docker build -t frontend:v1 .
 docker run -d -p 80:80 --name frontend --network roboshop frontend:v1 
+```
+4. docker compose
+
+in the mysql--> db-> we have app-user.sql, master.sql and schema.sql. here masetr.sql is alredy creating cities and in schema.sql also creating cities. schema.sql will creating duplicates, hence delete schema.sql from the db folder. then it will work

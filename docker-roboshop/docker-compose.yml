@@ -56,3 +56,10 @@ services:
       REDIS_HOST: redis
       CATALOGUE_HOST: catalogue
       CATALOGUE_PORT: 8080
+  
+  mysql:
+    build: ./7-mysql
+    image: kdprasad028/mysql_aug:v1
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "RoboShop@1"
