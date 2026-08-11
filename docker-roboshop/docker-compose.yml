@@ -26,6 +26,7 @@ services:
       - user
       - cart
       - shipping
+      - payment
     ports:
       - "80:80"
 
@@ -76,3 +77,28 @@ services:
     environment:
       CART_ENDPOINT: "cart:8080"
       DB_HOST: mysql
+
+  rabbitmq:
+    build: ./9-rabbitmq
+    image: kdprasad028/rabbitmq_aug:v1
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: "roboshop"
+      RABBITMQ_DEFAULT_PASS: "roboshop123"
+  
+  payment:
+    build: ./10-payment
+    image: kdprasad028/payment_aug:v1
+    container_name: payment
+    depends_on:
+      - cart
+      - user
+      - rabbitmq
+    environment:
+      CART_HOST: cart
+      CART_PORT: 8080
+      USER_HOST: user
+      USER_PORT: 8080
+      AMQP_HOST: rabbitmq
+      AMQP_USER: roboshop
+      AMQP_PASS: roboshop123
