@@ -23,6 +23,7 @@ services:
     container_name: frontend
     depends_on:
       - catalogue
+      - user
     ports:
       - "80:80"
 
