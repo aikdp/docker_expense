@@ -25,6 +25,7 @@ services:
       - catalogue
       - user
       - cart
+      - shipping
     ports:
       - "80:80"
 
@@ -64,3 +65,14 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: "RoboShop@1"
     command: --mysql-native-password=ON
+
+  shipping:
+    build: ./8-shipping
+    image: kdprasad028/shipping_aug:v1
+    container_name: shipping
+    depends_on:
+      - cart
+      - mysql
+    environment:
+      CART_ENDPOINT: "cart:8080"
+      DB_HOST: mysql
