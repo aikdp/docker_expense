@@ -27,8 +27,13 @@ services:
     ports:
       - "80:80"
 
+  redis:
+    build: ./4-redis
+    image: kdprasad028/redis_aug:v1
+    container_name: redis
+
   user:
-    build: ./4-user
+    build: ./5-user
     image: kdprasad028/user_aug:v1
     container_name: user
     depends_on:
@@ -39,6 +44,3 @@ services:
       MONGO_URL: "mongodb://mongodb:27017/users"
       MONGO: "true"
   
-  redis:
-    image: redis:7
-    container_name: redis
