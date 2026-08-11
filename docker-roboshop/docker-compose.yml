@@ -25,3 +25,19 @@ services:
       - catalogue
     ports:
       - "80:80"
+
+  user:
+    build: ./4-user
+    image: kdprasad028/user_aug:v1
+    container_name: user
+    depends_on:
+      - redis
+      - mongodb
+    environment:
+      - REDIS_URL='redis://redis:6379'
+      - MONGO_URL="mongodb://mongodb:27017/users"
+      - MONGO="true"
+  
+  redis:
+    image: redis:7
+    container_name: redis
