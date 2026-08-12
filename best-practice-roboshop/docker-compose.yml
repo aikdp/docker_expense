@@ -1,0 +1,104 @@
+name: roboshop
+networks:
+  default:
+    name: roboshop  #default means, all serveices in this compose file wil use this network
+    driver: bridge
+    external: false #flase, docker will create this network, true - docker doesn't create
+services:
+  mongodb:
+    build: ./1-mongodb
+    image: kdprasad028/mongodb_aug:v1
+    container_name: mongodb
+  
+  catalogue:
+    build: ./2-catalogue
+    image: kdprasad028/catalogue_aug:v1
+    container_name: catalogue
+    depends_on:
+      - mongodb
+
+  frontend:
+    build: ./3-frontend
+    image: kdprasad028/frontend_aug:v1
+    container_name: frontend
+    depends_on:
+      - catalogue
+      - user
+      - cart
+      - shipping
+      - payment
+    ports:
+      - "80:80"
+
+  redis:
+    build: ./4-redis
+    image: kdprasad028/redis_aug:v1
+    container_name: redis
+
+  user:
+    build: ./5-user
+    image: kdprasad028/user_aug:v1
+    container_name: user
+    depends_on:
+      - redis
+      - mongodb
+    environment:
+      REDIS_URL: 'redis://redis:6379'
+      MONGO_URL: "mongodb://mongodb:27017/users"
+      MONGO: "true"
+  
+  cart:
+    build: ./6-cart
+    image: kdprasad028/cart_aug:v1
+    container_name: cart
+    depends_on:
+      - redis
+      - catalogue
+    environment:
+      REDIS_HOST: redis
+      CATALOGUE_HOST: catalogue
+      CATALOGUE_PORT: 8080
+  
+  mysql:
+    build: ./7-mysql
+    image: kdprasad028/mysql_aug:v1
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "RoboShop@1"
+    command: --mysql-native-password=ON
+
+  shipping:
+    build: ./8-shipping
+    image: kdprasad028/shipping_aug:v1
+    container_name: shipping
+    depends_on:
+      - cart
+      - mysql
+    environment:
+      CART_ENDPOINT: "cart:8080"
+      DB_HOST: mysql
+
+  rabbitmq:
+    build: ./9-rabbitmq
+    image: kdprasad028/rabbitmq_aug:v1
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: "roboshop"
+      RABBITMQ_DEFAULT_PASS: "roboshop123"
+  
+  payment:
+    build: ./10-payment
+    image: kdprasad028/payment_aug:v1
+    container_name: payment
+    depends_on:
+      - cart
+      - user
+      - rabbitmq
+    environment:
+      CART_HOST: cart
+      CART_PORT: 8080
+      USER_HOST: user
+      USER_PORT: 8080
+      AMQP_HOST: rabbitmq
+      AMQP_USER: roboshop
+      AMQP_PASS: roboshop123
