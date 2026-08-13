@@ -13,6 +13,12 @@ WORKDIR /app
 COPY requirements.txt .
 # COPY payment.ini .
 # COPY *.py .
+RUN apk add --no-cache \
+        gcc \
+        musl-dev \
+        linux-headers \
+        python3-dev \
+        make
 RUN pip3 install --prefix=/install -r requirements.txt
 
 FROM python:3.9.25-alpine3.22
