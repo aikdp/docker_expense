@@ -1,0 +1,29 @@
+# Version control
+.git
+.gitignore
+
+# Dependencies & Local environments
+node_modules/
+venv/
+.env
+.env.*
+
+# Ide configs and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Build outputs & Logs
+dist/
+build/
+*.log
+npm-debug.log*
+
+# Language caches
+__pycache__/
+*.pyc
+
+
+#
+db

@@ -1,10 +1,26 @@
-FROM node:20
+# FROM node:20
+# WORKDIR /app
+# COPY package.json .
+# COPY *.js .
+# RUN npm install
+# EXPOSE 8080
+# # ENV REDIS_URL='redis://<REDIS-IP-ADDRESS>:6379' \
+# #     MONGO_URL="mongodb://<MONGODB-SERVER-IP-ADDRESS>:27017/users" \
+# #     MONGO="true"
+# CMD [ "node", "server.js" ]
+
+
+FROM node:20.20.2-alpine3.22 AS builder
 WORKDIR /app
 COPY package.json .
 COPY *.js .
 RUN npm install
+
+FROM node:20.20.2-alpine3.22
+WORKDIR /app
 EXPOSE 8080
-# ENV REDIS_URL='redis://<REDIS-IP-ADDRESS>:6379' \
-#     MONGO_URL="mongodb://<MONGODB-SERVER-IP-ADDRESS>:27017/users" \
-#     MONGO="true"
-CMD [ "node", "server.js" ]
+RUN addgroup -S roboshop && adduser -S -G roboshop roboshop && \
+    chown -R roboshop:roboshop /app
+COPY --from=builder /app /app
+USER roboshop
+CMD ["node", "server.js"]
